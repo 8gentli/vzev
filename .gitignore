@@ -1,0 +1,27 @@
+# --- Python Bytecode & Cache ---
+__pycache__/
+*.py[cod]
+*$py.class
+
+# --- Virtual Environments (wie angefordert) ---
+# Ignoriert den Ordner, in dem deine Bibliotheken liegen
+.venv/
+venv/
+env/
+ENV/
+
+# --- PyCharm / JetBrains IDE ---
+# Ignoriert projektspezifische IDE-Einstellungen, die nicht geteilt werden sollten
+.idea/
+
+# --- Betriebssystem-Dateien ---
+# Mac
+.DS_Store
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# --- Environment Variables ---
+# Falls du eine .env Datei nutzt (Sicherheit!)
+.env

@@ -1,0 +1,17 @@
+# Architectural Decisions (DECISIONS.md)
+
+This document serves as a living log of all technical decisions and the context constraints governing them.
+
+| Date | Category | Decision | Rationale / Constraints |
+|------|----------|----------|-------------------------|
+| 2026-04-09 | **Data Source** | Home Assistant API | HA stores an 8-day rolling history, which fulfills the daily chart MVP. It is already securely exposed via DuckDNS, avoiding exposing InfluxDB externally right now. |
+| 2026-04-09 | **Hosting / Deployment** | Local Docker / No Static IP | **Constraint:** No mandatory paid cloud subscriptions. Everything must be securely exposed behind the existing Nginx Proxy Manager / DuckDNS on the local network. |
+| 2026-04-09 | **Repo Structure** | Microservice Monorepo | Enables 1-click deployment via `docker-compose.yml` while isolating CPU-heavy Python ML tasks from lightweight UI routing. |
+| 2026-04-09 | **Tech Stack** | Vite (JS) + FastAPI (PY) + SQLite | Python ensures readiness for future local ML integration. Vite PWA ensures an app-like frontend. SQLite securely handles the limited scope of 6 users without a dedicated DB container. |
+| 2026-04-09 | **Code Knowledge** | No "Magic" Abstractions | **Constraint:** Code must be understandable for someone not natively fluent in React/Vite. One component per file, explicit docs. Python must have 1-line docstrings and no implicit side-effects. |
+| 2026-04-09 | **Authentication** | Email/Password with JWT | Future-proofs the PWA by allowing persistent sessions (enter the app without typing passwords daily), while robustly siloing data between the 6 distinct parties later. |
+| 2026-04-12 | **Chart Rendering** | Native ECharts SVGs | **Constraint Bugfix:** External dependencies like `react-icons` and DOM-level absolute positioning caused severe layout shifts and caching crashes in Vite. Icons are now baked purely into ECharts native canvas via stringified SVG paths, ensuring 100% bulletproof responsive dynamic scaling. |
+| 2026-04-13 | **Data Source Pivot**| Direct Solar-Log Polling | Querying Home Assistant 8-day history directly via REST creates a severe bottleneck and strains the HA event bus. Switched to `apscheduler` in FastAPI directly polling `http://solar-log/getjp` every minute, funneling it immediately into a dedicated, persisted SQLite Database (`vzev.db`). |
+| 2026-04-13 | **Billing Separation**| Import via `.ebix` XML | The live dashboard data (1-min SQLite tracking) is completely disjointed from accounting. Meaningful billing data will be strictly imported via 15-min `.ebix` XML source files later to ensure financial accuracy instead of relying on interpolated real-time polling aggregates. |
+| 2026-04-13 | **Timezone Handling** | Explicit Python `tzdata` | **Constraint:** Docker UTC offsets caused severe historical shifts in local SQLite timestamps. Hardcoded `Europe/Zurich` via the natively injected `zoneinfo` package into SQLAlchemy `datetime` models to ensure rigorous, localized stability regardless of the Debian host container configuration. |
+| 2026-04-13 | **UI Chart Architecture** | Echarts `time` Axis + Stacked Areas | **Constraint:** We dropped standard string categorical axes to use ISO datetime objects natively parsed by ECharts, allowing perfectly fluid granular time-zooming. Combined Consumption and PV-Surplus variables into a dynamically calculated stacked area architecture, which perfectly mimics the standalone PV Generation bounding curve envelope at 0 loss of detail. |
