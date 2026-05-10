@@ -15,8 +15,8 @@ Status siehe .md-Files.
 - [x] DB nicht löschen. Historie vor > 3 Tagen erst bei Bedarf laden.
 - [x] Daten bei focus der App neu laden
 - [x] "Letzte Aktualisierung" anzeigen
+- [ ] .cursorrules, AGENTS.md, etc. installieren analog Semesterarbeits-Repo.
+- [ ] Sekunden bei Aktualisierungs-Zeit entfernen
 
 - Weitere md-Files für Debugging und neue Features.
 - Lösung für Überprüfung und Korrektur vom visuellen Layout - Antigravity nach bestem Vorgehen fragen.
-
-- [ ] **Später (eher letzte große Task):** Produktions-Build des Frontends (z. B. `vite build` + statische Auslieferung / Nginx statt Vite-Dev im Docker) — **nach** Billing und weiteren Frontend-Ansichten (u. a. **Monatsdaten aus EbiX-Files**).
