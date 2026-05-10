@@ -10,7 +10,12 @@ export default function ThemeToggle() {
   }, [theme])
 
   return (
-    <button className="icon-btn" onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')} aria-label="Toggle Theme">
+    <button
+      type="button"
+      className="icon-btn"
+      onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+      aria-label={theme === 'dark' ? 'Hellmodus aktivieren' : 'Dunkelmodus aktivieren'}
+    >
       {theme === 'dark' ? <MdLightMode /> : <MdDarkMode />}
     </button>
   )

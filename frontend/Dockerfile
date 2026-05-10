@@ -9,5 +9,10 @@ RUN npm install
 
 COPY . .
 
-# Start the Vite development server (exposed on port 80 based on vite.config.js)
+ENV VITE_DEV_PORT=5173
+ENV VITE_API_PROXY=http://backend:8000
+
+EXPOSE 5173
+
+# Vite dev server (see vite.config.js)
 CMD ["npm", "run", "dev"]

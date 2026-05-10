@@ -1,6 +1,19 @@
 import ReactECharts from 'echarts-for-react'
 
-export default function SurplusGauge({ currentSurplus }) {
+function formatKw(value) {
+  const n = typeof value === 'number' && !Number.isNaN(value) ? value : 0
+  return `${n.toLocaleString('de-CH', { minimumFractionDigits: 1, maximumFractionDigits: 2 })} kW`
+}
+
+function formatUpdatedAt(date) {
+  if (!(date instanceof Date) || Number.isNaN(date.getTime())) return null
+  return new Intl.DateTimeFormat('de-CH', {
+    dateStyle: 'short',
+    timeStyle: 'medium',
+  }).format(date)
+}
+
+export default function SurplusGauge({ currentSurplus, lastUpdated }) {
   const cappedValue = currentSurplus > 10 ? 10 : currentSurplus
 
   const option = {
@@ -38,12 +51,12 @@ export default function SurplusGauge({ currentSurplus }) {
             return value
           }
         },
-        title: { offsetCenter: [0, -220], fontSize: 14, color: 'var(--text-muted)', fontWeight: 500, letterSpacing: 1 },
+        title: { show: false },
         detail: {
           fontSize: 45, fontWeight: '800', offsetCenter: [0, 45], color: 'var(--text-main)',
-          formatter: function () { return currentSurplus + ' kW' }
+          formatter: function () { return formatKw(currentSurplus) }
         },
-        data: [{ value: cappedValue, name: 'Aktueller PV-Überschuss' }],
+        data: [{ value: cappedValue, name: '' }],
         z: 2
       },
       {
@@ -95,8 +108,21 @@ export default function SurplusGauge({ currentSurplus }) {
     ]
   }
 
+  const updatedLabel = formatUpdatedAt(lastUpdated)
+
   return (
-    <div className="card">
+    <div className="card surplus-card">
+      <div className="surplus-card-header">
+        <h2 className="surplus-card-title">Aktueller PV-Überschuss</h2>
+        {updatedLabel ? (
+          <time
+            className="surplus-card-timestamp"
+            dateTime={lastUpdated.toISOString()}
+          >
+            {updatedLabel}
+          </time>
+        ) : null}
+      </div>
       <ReactECharts option={option} style={{ height: 350, width: '100%' }} opts={{ renderer: 'svg' }} />
     </div>
   )
