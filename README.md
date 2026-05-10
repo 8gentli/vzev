@@ -6,8 +6,8 @@ A purely local, Docker orchestrator-based Progressive Web App (PWA) displaying c
 
 ## 🏗️ Technical Overview
 
-- **Frontend**: Vite + React + Apache ECharts. Local development defaults to **http://localhost:5173** and proxies **`/api`** to the FastAPI backend (`frontend/vite.config.js`). Override with `VITE_API_PROXY` and `VITE_DEV_PORT` if needed.
-- **Docker**: `docker compose` maps host **8080** → container **5173** (Vite) and sets `VITE_API_PROXY=http://backend:8000` so the dev server can reach the API service by name. The API is also published on **8000** for direct access.
+- **Frontend**: Vite + React + Apache ECharts. In **`frontend/vite.config.js`** the dev server listens on **port 80** (for Docker: host **8080** → container **80**). The proxy forwards **`/api`** to **`http://backend:8000`** (resolvable only on the Docker network).
+- **Docker**: `docker compose` maps **`8080:80`**. The backend is also published on host **8000**. The frontend image build uses **`frontend/.dockerignore`** (host **`node_modules`** must not be copied into the image — avoids **`vite: Permission denied`** on Linux).
 - **Backend**: Python FastAPI with a local SQLite store and a REST API; the scheduler polls the Solar-Log JSON interface on your LAN.
 - **Data source**: High-frequency local network access to the Solar-Log device (e.g. `POST` to `/getjp`).
 
@@ -41,14 +41,16 @@ A purely local, Docker orchestrator-based Progressive Web App (PWA) displaying c
    docker compose up -d --build
    ```
 
+   Use **`--build`** after **code or Dockerfile changes** so images include the new files; for a simple restart with unchanged images, `docker compose up -d` is enough.
+
    (or `docker-compose up -d --build` if your installation still uses the hyphenated command.)
 
-4. **Reverse proxy (e.g. Nginx Proxy Manager).**  
-   Point your public hostname to **host port 8080** (frontend → Vite inside the container). The FastAPI backend polls Solar-Log on the LAN; keep it behind your firewall. Enable WebSocket support on the proxy if you rely on Vite live reload through that route.
+4. **Reverse proxy (e.g. Nginx / OpenResty).**  
+   Point your hostname to **host port 8080** (Vite inside the frontend container). The FastAPI backend reaches Solar-Log on the LAN; keep it behind your firewall. Enable WebSocket support on the proxy if you rely on Vite live reload through that route.
 
 ## 💻 Development Workflow
 
-Run services on the host without Docker:
+Run services on the host **without** Docker (optional):
 
 **Frontend (terminal 1)**
 
@@ -58,7 +60,9 @@ npm install
 npm run dev
 ```
 
-Open **http://localhost:5173**. Requests to **`/api/...`** are proxied to **`http://127.0.0.1:8000`** by default. With Docker, Compose sets **`VITE_API_PROXY=http://backend:8000`** inside the frontend container.
+By default **`vite.config.js`** uses **port 80** → open **http://localhost/** (on Windows you may need elevated rights for port 80). For a normal dev port use e.g. **`npm run dev -- --port 5173`** → **http://localhost:5173**.
+
+The **`/api`** proxy targets **`http://backend:8000`**, which only resolves **inside Docker**. If both backend and frontend run on the host, set the proxy in **`vite.config.js`** to **`http://127.0.0.1:8000`**, or prefer **`docker compose up`** so hostnames match.
 
 **Backend (terminal 2)**
 

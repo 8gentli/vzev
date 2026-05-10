@@ -6,9 +6,9 @@
 - [ ] **IN-PROGRESS**: Finish documentation phase (TASKS, STATE, README)
 
 ## Infrastructure Setup
-- [ ] **TODO**: Initialize Vite frontend project setup.
-- [ ] **TODO**: Initialize Python FastAPI backend environment.
-- [ ] **TODO**: Create Dockerfiles for front/backend and root `docker-compose.yml`.
+- [x] **DONE**: Initialize Vite frontend project setup.
+- [x] **DONE**: Initialize Python FastAPI backend environment.
+- [x] **DONE**: Create Dockerfiles for front/backend and root `docker-compose.yml`.
 - [ ] **TODO**: Clean up redundant constraints section in `INSTRUCTIONS.md`.
 
 ## Backend MVP (Data & API)
@@ -22,7 +22,7 @@
 - [x] **DONE**: Integrate Apache ECharts component.
 - [x] **DONE**: Connect frontend Axios/Fetch logic to backend API with silent 60-second auto-reloads.
 - [x] **DONE**: Execute perfect UI data matching. Implement Echarts `time` stacked Areas to trace realistic surplus envelopes.
-- [ ] **TODO**: Add PWA `manifest.json` and basic service worker for mobile installation.
+- [ ] **TODO**: Add PWA `manifest.json`, ICO and basic service worker for mobile installation.
 
 ## QA & Handoff
 - [x] **DONE**: Perform full visual UI checking.
@@ -36,3 +36,4 @@
 - [ ] **TODO**: Implement push notification system (e.g., "PV surplus > 2kW") via PWA Service Worker.
 - [ ] **TODO**: Develop Python ML inference script for power forecasting and map it to ECharts overlay.
 - [ ] **TODO**: Build automated PDF invoice generation script (billing module).
+- [ ] **TODO**: Production frontend — run **`vite build`** and deploy **`dist/`** as static assets instead of the Vite dev server in Docker.
