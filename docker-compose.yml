@@ -5,10 +5,7 @@ services:
     build:
       context: ./frontend
     ports:
-      - "8080:5173"
-    environment:
-      - VITE_API_PROXY=http://backend:8000
-      - VITE_DEV_PORT=5173
+      - "8080:80"
     depends_on:
       - backend
 

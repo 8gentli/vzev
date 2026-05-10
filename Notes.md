@@ -18,3 +18,5 @@ Status siehe .md-Files.
 
 - Weitere md-Files für Debugging und neue Features.
 - Lösung für Überprüfung und Korrektur vom visuellen Layout - Antigravity nach bestem Vorgehen fragen.
+
+- [ ] **Später (eher letzte große Task):** Produktions-Build des Frontends (z. B. `vite build` + statische Auslieferung / Nginx statt Vite-Dev im Docker) — **nach** Billing und weiteren Frontend-Ansichten (u. a. **Monatsdaten aus EbiX-Files**).
