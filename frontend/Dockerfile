@@ -7,6 +7,7 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 
+# Ohne Host-node_modules (.dockerignore), sonst Linux: vite Permission denied
 COPY . .
 
 # Start the Vite development server (exposed on port 80 based on vite.config.js)

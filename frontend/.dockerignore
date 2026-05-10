@@ -1,0 +1,11 @@
+# Host-Artefakte nicht ins Image kopieren — sonst z. B. Windows-node_modules
+# ohne Execute-Bits → "vite: Permission denied" im Linux-Container.
+node_modules
+dist
+.git
+.gitignore
+*.md
+.DS_Store
+Thumbs.db
+npm-debug.log*
+npm-debug.log
